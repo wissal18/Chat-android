@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:padding="10dp"
+    tools:context=".activities.SignInActivity">
+
+
+    <FrameLayout
+        android:id="@+id/frameLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        app:layout_constraintEnd_toEndOf="@+id/id_login_pwd"
+        app:layout_constraintStart_toStartOf="@+id/id_login_pwd"
+        app:layout_constraintTop_toBottomOf="@+id/id_login_pwd">
+
+        <Button
+            android:id="@+id/id_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_bg"
+            android:backgroundTint="#FBF8F8"
+            android:text="Login"
+            app:backgroundTint="#3F51B5"
+            app:layout_constraintEnd_toEndOf="@+id/id_login_pwd"
+            app:layout_constraintStart_toStartOf="@+id/id_login_pwd"
+            app:layout_constraintTop_toBottomOf="@+id/id_login_pwd" />
+
+        <ProgressBar
+            android:id="@+id/id_login_progressbar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+    </FrameLayout>
+
+
+
+
+    <EditText
+        android:id="@+id/id_login_pwd"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/input_bg"
+        android:drawableLeft="@drawable/ic_baseline_security_24"
+        android:ems="10"
+        android:hint="mot de passe"
+        android:inputType="textPassword"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:textColorHint="#E3DDDD"
+        app:layout_constraintEnd_toEndOf="@+id/id_login_email"
+        app:layout_constraintStart_toStartOf="@+id/id_login_email"
+        app:layout_constraintTop_toBottomOf="@+id/id_login_email" />
+
+    <EditText
+        android:id="@+id/id_login_email"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/input_bg"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
+        android:ems="10"
+        android:hint="email address"
+        android:inputType="textEmailAddress"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:textColorHint="#E3DDDD"
+        app:layout_constraintEnd_toEndOf="@+id/id_login"
+        app:layout_constraintStart_toStartOf="@+id/id_login"
+        app:layout_constraintTop_toBottomOf="@+id/id_login" />
+
+    <TextView
+        android:id="@+id/id_login"
+        style="@style/st_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="100dp"
+        android:text="Sign In"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/id_login_signup"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:text="Create an account"
+        android:textColor="#2A3537"
+        android:textFontWeight="50"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/frameLayout3"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="@+id/frameLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
