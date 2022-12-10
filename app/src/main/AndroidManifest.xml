@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApplication">
-        <activity android:name=".activities.ChatActivity"></activity>
+        <activity
+            android:name=".activities.ChatActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".activities.UsersActivity" />
         <activity
             android:name=".activities.SignInActivity"
