@@ -89,9 +89,13 @@ loading(true);
             .add(user)
             .addOnSuccessListener(documentReference -> {
 //preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN,true);
-preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
-preferenceManager.putString(Constants.KEY_NAME,binding.idSignupUsername.getText().toString());
-preferenceManager.putString(Constants.KEY_IMAGE,encodeImage);
+//preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
+//preferenceManager.putString(Constants.KEY_NAME,binding.idSignupUsername.getText().toString());
+//preferenceManager.putString(Constants.KEY_IMAGE,encodeImage);
+                Constants.KEY_IS_SIGNED_IN=true;
+                Constants.KEY_USER_ID=documentReference.getId();
+                Constants.KEY_NAME=binding.idSignupUsername.getText().toString();
+                Constants.KEY_IMAGE=encodeImage;
 Intent intent=new Intent(getApplicationContext(),MainActivity.class);
 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 startActivity(intent);
@@ -109,6 +113,7 @@ private String encodeImage(Bitmap bitmap){
     ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
     previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
     byte[] bytes=byteArrayOutputStream.toByteArray();
+
     return Base64.encodeToString(bytes,Base64.DEFAULT);
 
 }
