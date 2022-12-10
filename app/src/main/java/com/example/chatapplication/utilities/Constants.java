@@ -10,6 +10,7 @@ public class Constants {
     public static  String KEY_USER_ID = "userID";
     public static  String KEY_IMAGE = "image";
     public static  String KEY_FCM_TOKEN = "fcmToken";
+    public static  String KEY_USER = "user";
 
 
 

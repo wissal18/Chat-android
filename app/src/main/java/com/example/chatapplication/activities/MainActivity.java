@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadUserDetails(){
-        binding.idMainName.setText(preferenceManager.getString(Constants.KEY_NAME));
+        binding.idMainName.setText(Constants.KEY_NAME);
 
        // byte[] bytes= Base64.getDecoder().decode(preferenceManager.getString(Constants.KEY_IMAGE));Check this one
 
