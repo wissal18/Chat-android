@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
             }
         });
+        binding.idMainFabNewChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),UsersActivity.class));
+            }
+        });
     }
 
     public void loadUserDetails(){
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateToken(String token){
         FirebaseFirestore database=FirebaseFirestore.getInstance();
         DocumentReference documentReference=database.collection(Constants.KEY_COLLECTION_USERS).document(Constants.KEY_USER_ID);
-        documentReference.update(Constants.KEY_FCM_TOKEN,token).addOnSuccessListener(umused -> showToast("Token updated successfully"))
+        documentReference.update(Constants.KEY_FCM_TOKEN,token)
                 .addOnFailureListener(e -> showToast("Unable to update token"));
 
 

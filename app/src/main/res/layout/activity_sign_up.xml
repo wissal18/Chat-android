@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Add Image"
-            android:textColor="@color/secoNdary_text" />
+            android:textColor="@color/secondary_text" />
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/id_signup_image_profile"
