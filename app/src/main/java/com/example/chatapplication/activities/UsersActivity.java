@@ -59,6 +59,7 @@ private PreferenceManager preferenceManager;
 
                             user.image=queryDocumentSnapshot.getString("image");
                             user.token=queryDocumentSnapshot.getString("fcmToken");
+                            user.id=queryDocumentSnapshot.getId();
                             users.add(user);
 
                         }
