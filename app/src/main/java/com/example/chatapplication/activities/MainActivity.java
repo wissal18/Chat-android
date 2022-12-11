@@ -10,21 +10,35 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.chatapplication.R;
+import com.example.chatapplication.adapters.RecentConversationsAdapter;
 import com.example.chatapplication.databinding.ActivityMainBinding;
+import com.example.chatapplication.listeners.ConversionListener;
+import com.example.chatapplication.models.ChatMessage;
+import com.example.chatapplication.models.User;
 import com.example.chatapplication.utilities.Constants;
 import com.example.chatapplication.utilities.PreferenceManager;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import android.util.Base64;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements ConversionListener {
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
+    private List<ChatMessage> conversations;
+    private RecentConversationsAdapter conversationsAdapter;
+    private FirebaseFirestore database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +47,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         preferenceManager=new PreferenceManager(getApplicationContext());
         System.out.println("here3"+Constants.KEY_IMAGE);
+        init();
         loadUserDetails();
         getToken();
         setListeners();
+        listenConversations();
+
+    }
+
+    private void init(){
+        conversations=new ArrayList<>();
+        conversationsAdapter=new RecentConversationsAdapter(conversations,this);
+        binding.idConversationRecycleView.setAdapter(conversationsAdapter);
+        database=FirebaseFirestore.getInstance();
     }
 
     public void setListeners(){
@@ -66,6 +90,64 @@ public class MainActivity extends AppCompatActivity {
     private void showToast(String message){
         Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
     }
+
+
+    private void listenConversations(){
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo("senderId",Constants.KEY_USER_ID)
+                .addSnapshotListener(eventListener);
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo("receivedId",Constants.KEY_USER_ID)
+                .addSnapshotListener(eventListener);
+    }
+
+    private final EventListener<QuerySnapshot> eventListener=(value, error)->{
+        if(error != null){
+            return;
+        }if(value != null){
+            for(DocumentChange documentChange:value.getDocumentChanges()){
+                if(documentChange.getType()==DocumentChange.Type.ADDED){
+                    String senderId=documentChange.getDocument().getString("senderId");
+                    String receiverId=documentChange.getDocument().getString("receiverId");
+                    ChatMessage chatMessage=new ChatMessage();
+                    chatMessage.senderID=senderId;
+                    chatMessage.receiverID=receiverId;
+                    if (Constants.KEY_USER_ID.equals(senderId)){
+                        chatMessage.conversionImage=documentChange.getDocument().getString("receiverImage");
+                        chatMessage.conversionName=documentChange.getDocument().getString("receiverName");
+                        chatMessage.conversionId=documentChange.getDocument().getString("receiverId");
+                    }else {
+                        chatMessage.conversionImage=documentChange.getDocument().getString("senderImage");
+                        chatMessage.conversionName=documentChange.getDocument().getString("senderName");
+                        chatMessage.conversionId=documentChange.getDocument().getString("senderId");
+                    }
+                    chatMessage.message=documentChange.getDocument().getString("lastMessage");
+                    chatMessage.dateObject=documentChange.getDocument().getDate("timestamp");
+                    conversations.add(chatMessage);
+                }else if(documentChange.getType()==DocumentChange.Type.MODIFIED){
+                    for(int i=0;i<conversations.size();i++){
+                        String senderId=documentChange.getDocument().getString("senderId");
+                        String receiverId=documentChange.getDocument().getString("receiverId");
+                        if(conversations.get(i).senderID.equals(senderId) && conversations.get(i).receiverID.equals(receiverId))
+                        {
+                            conversations.get(i).message=documentChange.getDocument().getString("lastMessage");
+                            conversations.get(i).dateObject=documentChange.getDocument().getDate("timestamp");
+                            break;
+                        }
+                    }
+                }
+            }
+            Collections.sort(conversations,(obj1,obj2)->obj2.dateObject.compareTo(obj1.dateObject));
+
+            conversationsAdapter.notifyDataSetChanged();
+            binding.idConversationRecycleView.smoothScrollToPosition(0);
+            binding.idConversationRecycleView.setVisibility(View.VISIBLE);
+            binding.idConversationsProgressBar.setVisibility(View.GONE);
+
+        }
+
+    };
+
     public void updateToken(String token){
         FirebaseFirestore database=FirebaseFirestore.getInstance();
         DocumentReference documentReference=database.collection(Constants.KEY_COLLECTION_USERS).document(Constants.KEY_USER_ID);
@@ -93,5 +175,12 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 })
                 .addOnFailureListener(e->showToast("Unable to sign out"));
+    }
+
+    @Override
+    public void onConversionClicked(User user) {
+        Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
+        intent.putExtra("user",user);
+        startActivity(intent);
     }
 }
